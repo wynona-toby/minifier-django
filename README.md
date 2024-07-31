@@ -11,3 +11,7 @@ A simple web application to minify HTML, CSS, and JavaScript code. Users can eit
 5. Run the Development Server: `python manage.py runserver`    
 
 The application will be available at http://127.0.0.1:8000.
+
+# Implementation
+![image](https://github.com/user-attachments/assets/41ea5d62-b109-4877-8571-128228959e13)
+
