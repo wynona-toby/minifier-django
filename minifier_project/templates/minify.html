@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Minifier</title>
+    
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #F5F5DC;
+        color: #004225;
+        margin: 0;
+        padding: 20px;
+    }
+    .container {
+        max-width: 800px;
+        margin: auto;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+    }
+    h1 {
+        text-align: center;
+        color: #004225;
+    }
+    .input {
+        margin-bottom: 20px;
+    }
+    textarea, input[type="file"], .btn {
+        width: 97%;
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+        font-size: 16px;
+    }
+    .btn {
+        background-color: #FFB000;
+        margin-left: 10px;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+    .btn:hover {
+        background-color: #FFCF9D;
+    }
+    .result-box {
+        background-color: #F5F5DC;
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+        margin-top: 20px;
+        height: 200px; 
+        overflow-y: auto; 
+        overflow-x: auto; 
+    }
+    .result-box pre {
+        white-space: pre-wrap; 
+        word-wrap: break-word; 
+        margin: 0; 
+    }
+    .result-actions {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 10px;
+        position: relative; 
+        z-index: 1;
+    }
+    .result-actions button {
+        background-color: #004225;
+        color: #fff;
+        border: none;
+        padding: 10px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    .result-actions button:hover {
+        background-color: #FFB000;
+    }    
+    footer{
+      text-align: center;
+      padding: 10px 0;
+    }
+    .fa{
+      font-size:20px;
+    }
+    </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Minify Your Code</h1>
+    <div class="input">
+        <form id="minify-form" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <textarea id="code-area" name="code_text" rows="10" placeholder="Paste your code here..."></textarea>
+            <input type="file" name="code_file">
+            <button type="submit" class="btn">Minify</button>
+        </form>
+    </div>
+    <div class="result-box" id="result-box" style="display:none;">
+        <pre id="minified-code"></pre>
+    </div>
+    <div class="result-actions" style="display:none;">
+        <button onclick="copyToClipboard()">Copy to Clipboard</button>
+        <a id="download-link" href="#" download="minified-code.txt"><button>Download</button></a>
+    </div>
+</div>
+<footer>
+  <p> Made by Wynona Toby | <a href="https://github.com/wynona-toby" target="blank"><i class="fa fa-github"></i></a> </p>
+</footer>
+    <script> 
+      
+      document.getElementById('minify-form').onsubmit = async function(event) {
+        event.preventDefault();
+        const formData = new FormData(this);
+        let response = await fetch('', {
+            method: 'POST',
+            body: formData,
+        });
+        let result = await response.text();
+        document.getElementById('minified-code').textContent = result;
+        document.getElementById('result-box').style.display = 'block';
+        document.getElementsByClassName('result-actions')[0].style.display = 'flex';
+        document.getElementById('download-link').href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(result);
+    };
+    
+    function copyToClipboard() {
+        const code = document.getElementById('minified-code').textContent;
+        navigator.clipboard.writeText(code).then(() => {
+            alert('Code copied to clipboard!');
+        });
+    }
+    
+    window.onload = function() {
+        document.getElementById('code-area').value = '';
+    };
+    
+    
+    </script>
+</body>
+</html>
